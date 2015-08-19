@@ -73,11 +73,11 @@ function callHook() {
     }
     
     try {
-        if(file_exists(ROOT . DS . 'application' . DS . 'controllers' . DS . strtolower($controller) . 'Controller.php')) {
+        if(file_exists(ROOT . DS . 'application' . DS . 'controllers' . DS . ucwords($controller) . 'Controller.php')) {
             $controllerName = $controller;
             $controller = ucwords($controller);
 
-            if(file_exists(ROOT . DS . 'application' . DS . 'models' . DS . strtolower($controller) . '.php')) {
+            if(file_exists(ROOT . DS . 'application' . DS . 'models' . DS . ucwords($controller) . '.php')) {
                 $model = rtrim($controller, 's');
             } else {
                 throw new Exception ('Model file "'. ucwords($controller) .'" doesn\'t exist, please add.');
@@ -116,12 +116,12 @@ function __autoload($className) {
         require_once(ROOT . DS . 'library' . DS . strtolower($className) . '.class.php');
     } else if (file_exists(ROOT . DS . 'libs' . DS . strtolower($className) . '.class.php')) {
         require_once(ROOT . DS . 'libs' . DS . strtolower($className) . '.class.php');
-    } else if (file_exists(ROOT . DS . 'application' . DS . 'controllers' . DS . strtolower($className) . '.php')) {
-        require_once(ROOT . DS . 'application' . DS . 'controllers' . DS . strtolower($className) . '.php');
-    } else if(file_exists(ROOT . DS . 'application' . DS . 'models' . DS . strtolower($className) . '.php')) {
-        require_once(ROOT . DS . 'application' . DS . 'models' . DS . strtolower($className) . '.php');
+    } else if (file_exists(ROOT . DS . 'application' . DS . 'controllers' . DS . ucwords($className) . '.php')) {
+        require_once(ROOT . DS . 'application' . DS . 'controllers' . DS . ucwords($className) . '.php');
+    } else if(file_exists(ROOT . DS . 'application' . DS . 'models' . DS . ucwords($className) . '.php')) {
+        require_once(ROOT . DS . 'application' . DS . 'models' . DS . ucwords($className) . '.php');
     } else if (file_exists(ROOT . DS . 'lib' . DS . strtolower($className) . '.php')) {
-        require_once(ROOT . DS . 'application' . DS . 'models' . DS . strtolower($className) . '.php');
+        require_once(ROOT . DS . 'application' . DS . 'models' . DS . ucwords($className) . '.php');
     } else {
         /* Error Generation Code Here */
     }
