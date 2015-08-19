@@ -29,7 +29,7 @@ class Test extends Model {
 
 }
 ?>
-	```
+```
 
 6.- Create directory View and inside create index.php view
 
