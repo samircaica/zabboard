@@ -1,8 +1,4 @@
 <?php
-//session_start();
-if(!isset($_SESSION)){
-    session_start();
-}
  
 /** Check if environment is development and display errors **/
  
