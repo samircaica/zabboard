@@ -1,7 +1,7 @@
 # zabboard
 Zabbix Board
 
-#Installation
+##Installation
 
 1.- Configure Apache with mod_rewrite
 
@@ -11,27 +11,31 @@ Zabbix Board
 
 4..- Create into application/controller a new Controller
 
-	```php
-	class TestController extends Controller {
-		function index() {
+```php
+<?php
+class TestController extends Controller {
+	function index() {
 
-		}
 	}
-	```
+}
+?>
+```
 
 5.- Create Model Test
 
-	```php
-	class Test extends Model {
+```php
+<?php
+class Test extends Model {
 
-	}
+}
+?>
 	```
 
 6.- Create directory View and inside create index.php view
 
-	```php
-	<?php
-		echo "Test view from Test";
-	?>
-	<BR>
-	```
+```php
+<?php
+	echo "Test view from Test";
+?>
+<BR>
+```
