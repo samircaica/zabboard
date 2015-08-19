@@ -13,9 +13,9 @@ class Controller {
     public $params;
  
     function __construct($model, $controller, $action, $queryString) {
-        if(!isset($_SESSION)) {
-            session_start();
-        }
+        
+        
+        //$_SESSION['favcolor'] = new stdClass();
         //print_r($queryString);
         $this->_controller = $controller;
         $this->_action = $action;
@@ -24,7 +24,7 @@ class Controller {
             $this->_id = $queryString[0];
         }
 
-        $this->params = new stdClass();
+        //$this->params = new stdClass();
         $this->params = $_SESSION['params'];
         
         try {
@@ -105,6 +105,7 @@ class Controller {
     function renderPartial($text=null) {
         extract($this->variables);
         $this->params = $_SESSION['params'];
+
         try {
             if(file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $text . '.php')) {
                 include(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $text . '.php');
@@ -121,13 +122,14 @@ class Controller {
 
     function __destruct() {
         //echo $this->renderHeader;
+        $_SESSION['params'] = $this->params;
+
         if(!empty($this->_partial)) {
             $this->renderPartial($this->_partial);
         } else {
             //$this->_template->render($this->renderHeader);
             $this->render($this->renderHeader);
         }
-        
         $_SESSION['params'] = $this->params;
     }
          
