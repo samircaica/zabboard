@@ -11,6 +11,6 @@ define('DB_HOST', 'localhost');
 
 define('DEFAULT_CONTROLLER', 'test');
 
-define('BASE_URL','http://app.dev');
+define('BASE_URL','http://zabboard.dev');
 
 ?>

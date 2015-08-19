@@ -7,4 +7,4 @@ Zabbix Board
 
 2.- Edit config/config.php
 
-3.- 
+3.- Create virtualhost

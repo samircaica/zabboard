@@ -7,7 +7,7 @@
 <?php
 if($authorized) {
 ?>
-<a href="http://app.dev/test/infraestructura">Infraestructura</a>
+<a href="<?=BASE_URL?>/test/infraestructura">Infraestructura</a>
 <?php
 }
 ?>

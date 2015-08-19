@@ -13,8 +13,8 @@ class TestController extends Controller {
 	function index() {
 		$this->set('title',$this->title);
 		//$this->renderHeader = false;
-		$this->params->authorized = $authorized;
-		$this->set("authorized", $authorized);
+		$this->params->authorized = $this->authorized;
+		$this->set("authorized", $this->authorized);
 	}
 
 	function login() {
@@ -75,8 +75,8 @@ class TestController extends Controller {
 
 			$this->params->Api->userLogout('', '');
 			$this->params->authorized = false;
-			$authorized = $this->params->authorized;
-			$this->set("authorized", $authorized);
+			$this->authorized = $this->params->authorized;
+			$this->set("authorized", $this->authorized);
 			//var_dump($this->params->Api);
 		} catch(Exception $e) {
 			echo $e->getMessage();
@@ -86,8 +86,8 @@ class TestController extends Controller {
 
 	function infraestructura() {
 		$this->set('title', "Infraestructura");
-		$authorized = $this->params->authorized;
-		$this->set("authorized", $authorized);
+		$this->authorized = $this->params->authorized;
+		$this->set("authorized", $this->authorized);
 
 		try {
 			$groups = $this->params->Api->hostgroupGet(array('output' => 'extend'), '');
