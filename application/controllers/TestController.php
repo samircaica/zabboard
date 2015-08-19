@@ -13,7 +13,7 @@ class TestController extends Controller {
 	function index() {
 		$this->set('title',$this->title);
 		//$this->renderHeader = false;
-		$this->params->authorized = $this->authorized;
+		//$this->params->authorized = $this->authorized;
 		$this->set("authorized", $this->authorized);
 	}
 
