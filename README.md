@@ -11,27 +11,27 @@ Zabbix Board
 
 4..- Create into application/controller a new Controller
 
-<code>
+	```php
 	class TestController extends Controller {
 		function index() {
 
 		}
 	}
-</code>
+	```
 
 5.- Create Model Test
 
-<code>
+	```php
 	class Test extends Model {
 
 	}
-</code>
+	```
 
 6.- Create directory View and inside create index.php view
 
-<code>
+	```php
 	<?php
 		echo "Test view from Test";
 	?>
 	<BR>
-</code>
+	```
