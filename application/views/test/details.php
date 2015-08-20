@@ -26,7 +26,7 @@ foreach($graphs as $graph) {
 foreach($graphs as $graph) {
 	//array_push($group_list, $group->groupid);
 ?>
-<img src="http://192.168.1.43:3080/zabbix/chart2.php?graphid=<?=$graph->graphid?>&period=<?=$period?>"><br>
+<img src="http://152.139.22.30/zabbix/chart2.php?graphid=<?=$graph->graphid?>&period=<?=$period?>"><br>
 <?php
 }
 //print_r($hosts);

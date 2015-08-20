@@ -1,10 +1,11 @@
-<?php    
+<?php
+/*
 if(!isset($_SESSION)){
 	//echo "no session index2";
 	session_start();
 	//$_SESSION['params'] = new stdClass();
 }
- 
+*/
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(dirname(__FILE__)));
  

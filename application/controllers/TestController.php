@@ -1,7 +1,17 @@
 <?php
-//session_start();
+
 require_once '../libs/ZabbixApi.class.php';
 use ZabbixApi\ZabbixApi;
+
+if(!isset($_SESSION)){
+    //echo "no session index2";
+    session_start();
+    //$_SESSION['params'] = new stdClass();
+}
+
+//session_start();
+//require_once '../libs/ZabbixApi.class.php';
+//use ZabbixApi\ZabbixApi;
 
 class TestController extends Controller {
 
@@ -35,7 +45,9 @@ class TestController extends Controller {
 				$this->set("dump", print_r($this->api));
 				*/
 				$this->params->Api = new ZabbixApi();
-				$this->params->Api->setApiUrl('http://192.168.1.43:3080/zabbix/api_jsonrpc.php');
+				//$this->params->Api->setApiUrl('http://192.168.1.43:3080/zabbix/api_jsonrpc.php');
+				#Banco de Chile
+				$this->params->Api->setApiUrl('http://152.139.22.30/zabbix/api_jsonrpc.php');
 				$this->params->Api->userLogin(array('user' => $usuario, 'password' => $password));
 
 				$hostGroups = $this->params->Api->hostgroupGet(array('real_hosts' => true));
