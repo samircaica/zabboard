@@ -5,8 +5,9 @@
 </style>
 <body>
 <?php
-if($authorized) {
+if($this->params->authorized) {
 ?>
+<a href="<?=BASE_URL?>/">Inicio</a>
 <a href="<?=BASE_URL?>/test/infraestructura">Infraestructura</a>
 <?php
 }

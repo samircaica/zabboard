@@ -1,6 +1,6 @@
 <BR>
 <?php
-if($authorized) {
+if($this->params->authorized) {
 ?>
 <a href="<?=BASE_URL?>/test/logout">Salir</a>
 <?php

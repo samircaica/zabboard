@@ -1,20 +1,13 @@
-<?=$message?>
-
 <?php
-
-if($authorized == true) {
-	foreach($hostGroups as $hostGroup) {
-		echo $hostGroup->name."<br>";
-		echo $hostGroup->groupid."<br>";
-	}
-	?>
-	<a href="infraestructura">Infraestructura</a>
-	<a href="servicios">Servicios</a>
-	<?php
-}
-if($authorized == false) {
-	?>
-	<a href="/">Volver</a>
-	<?php
+if($this->params->message != '') {
+?>
+Mensaje: <?=$this->params->message?>
+<?php
 }
 ?>
+<BR><BR>
+<form action="login" method="post">
+usuario: <input type="text" value="" name="usuario">
+password: <input type="text" value="" name="password"> 
+<input type="submit" value="Login">
+</form>

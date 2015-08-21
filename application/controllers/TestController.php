@@ -5,120 +5,144 @@ use ZabbixApi\ZabbixApi;
 class TestController extends Controller {
 
 	private $title = 'Test Page';
-	private $api = array();
-	private $authorized = false;
+	//private $api = array();
+	//private $authorized = false;
+
 	
 	
 	function index() {
-		$this->set('title',$this->title);
+		$this->set('title','Inicio');
+		$this->params->message = '';
 		//$this->renderHeader = false;
-		//$this->params->authorized = $this->authorized;
+		
 		/* 
 		Load TestLib
 		$testlib = new TestLib();
 		*/
-		$this->set("authorized", $this->authorized);
+		
+		if($this->params->authorized == true) {
+			$this->redirect_to("test/main");
+		} else {
+			$this->params->authorized = false;
+			$this->redirect_to("test/login");
+		}
 	}
 
 	function login() {
-		$this->set('title', "Add page");
-		
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		$this->set('title', "Login");
+		//$this->set("authorized", $this->authorized);
+		if($_SERVER['REQUEST_METHOD'] === 'GET') {
+			$this->params->message = '';
+			
+			if($this->params->authorized == true) {
+				$this->redirect_to("test/main");
+			}
+		}
+		if($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$usuario = $_POST['usuario'];
 			$password = $_POST['password'];
-			$this->set('message', "");
+			//$this->set('message', "");
+			$this->params->message = '';
 
 			try {
-				//$api = new ZabbixApi('http://192.168.1.43:3080/zabbix/api_jsonrpc.php', $usuario, $password);
 				
-				/*
-				$this->api = new ZabbixApi();
-				$this->api->setApiUrl('http://192.168.1.43:3080/zabbix/api_jsonrpc.php');
-				$this->api->userLogin(array('user' => $usuario, 'password' => $password));
-				$this->set("dump", print_r($this->api));
-				*/
 				$this->params->Api = new ZabbixApi();
+				#Local
 				//$this->params->Api->setApiUrl('http://192.168.1.43:3080/zabbix/api_jsonrpc.php');
 				#Banco de Chile
 				$this->params->Api->setApiUrl('http://152.139.22.30/zabbix/api_jsonrpc.php');
-				$this->params->Api->userLogin(array('user' => $usuario, 'password' => $password));
+				$login = $this->params->Api->userLogin(array('user' => $usuario, 'password' => $password));
+				print_r($login);
 
-				$hostGroups = $this->params->Api->hostgroupGet(array('real_hosts' => true));
-
-				$this->set("hostGroups", $hostGroups);
-    			echo "<BR>";
-    			echo "----";
-    			echo "<BR>";
-    			//print_r($this->_params['Api']);
-    			//$this->params->someProperty = 'hello';
-
-				//store in session
-				$authorized = true;
+				$this->params->authorized = true;
+				$this->params->message = 'Login successfuly';
+				$this->redirect_to("test/main");
 
 			} catch(Exception $e) {
 				// Exception in ZabbixApi catched
-    			//echo $e->getMessage();
-    			$this->set('message', $e->getMessage());
-    			$authorized = false;
+    			$this->params->message = $e->getMessage();
+    			$this->params->authorized = false;
+    			//$this->redirect_to("test/login");
 			}
-			$this->set("authorized", $authorized);
-			$this->params->authorized = $authorized;
 
 		}
-		//$_SESSION['params'] = $this->params;
 	}
 
 	function logout() {
-		try {
-			//$this->params = $_SESSION['params'];
+		if($this->params->authorized == true) {
+			try {
+				$this->set('title', "Logout");
 
-			//add something else, which will be stored in the session
-			//$this->params->anotherPropery = 'Something';
-			//echo $this->params->someProperty;
-			//echo $this->params->anotherPropery;
-			$this->set('title', "Logout");
-
-			$this->params->Api->userLogout('', '');
-			$this->params->authorized = false;
-			$this->authorized = $this->params->authorized;
-			$this->set("authorized", $this->authorized);
-			//var_dump($this->params->Api);
-		} catch(Exception $e) {
-			echo $e->getMessage();
+				$this->params->Api->userLogout('', '');
+				$this->params->Api = NULL;
+				$this->params->authorized = false;
+				$this->params->message = "usuario deslogeado";
+				$this->redirect_to("test/login");
+			} catch(Exception $e) {
+				// Exception in ZabbixApi catched
+    			$this->params->message = $e->getMessage();
+			}
+		} else {
+			$this->redirect_to("test/index");
 		}
+	}
+
+	function main() {
+		$this->set('title', "Principal");
 		
+		if($this->params->authorized == true) {
+			try {
+				$hostGroups = $this->params->Api->hostgroupGet(array('real_hosts' => true));
+
+				$this->set("hostGroups", $hostGroups);
+				echo "<BR>";
+				echo "----";
+				echo "<BR>";
+				//print_r($this->_params['Api']);
+				//$this->params->someProperty = 'hello';
+
+			} catch(Exception $e) {
+				// Exception in ZabbixApi catched
+				//echo $e->getMessage();
+				$this->set('message', $e->getMessage());
+			}
+		} else {
+			$this->redirect_to("test/index");
+		}
+
 	}
 
 	function infraestructura() {
 		$this->set('title', "Infraestructura");
-		$this->authorized = $this->params->authorized;
-		$this->set("authorized", $this->authorized);
+		if($this->params->authorized == true) {
+			try {
+				$groups = $this->params->Api->hostgroupGet(array('output' => 'extend'), '');
+				$group_list = array();
+				foreach($groups as $group) {
+				    array_push($group_list, $group->groupid);
+				}
+				$hosts = $this->params->Api->hostGet(array('groupids' => $group_list, 'output' => array('hostid', 'host', 'name', 'description')), '');
+				//$hosts = $this->params->Api->hostGet(array('groupids' => $group_list, 'output' => 'extend'), '');
+		 
+				$host_lists = array();
+				foreach($hosts as $host) {
+					echo $host->host;
+				    $host_lists[$host->hostid] = $host->host;
+				    //$host_lists[$host->hostid] = $host->name;
+				    echo "<BR>";
 
-		try {
-			$groups = $this->params->Api->hostgroupGet(array('output' => 'extend'), '');
-			$group_list = array();
-			foreach($groups as $group) {
-			    array_push($group_list, $group->groupid);
+				    
+				}
+				//$this->set("groups", $groups);
+				$this->set("hosts", $hosts);
+				$this->set("host_lists", $host_lists);
+				$this->params->hosts = $hosts;
+				$this->params->host_lists = $host_lists;
+			}catch(Exception $e) {
+				echo $e->getMessage();
 			}
-			$hosts = $this->params->Api->hostGet(array('groupids' => $group_list, 'output' => array('hostid', 'host', 'name', 'description')), '');
-			//$hosts = $this->params->Api->hostGet(array('groupids' => $group_list, 'output' => 'extend'), '');
-	 
-			$host_lists = array();
-			foreach($hosts as $host) {
-				echo $host->host;
-			    $host_lists[$host->hostid] = $host->host;
-			    //$host_lists[$host->hostid] = $host->name;
-			    echo "<BR>";
-
-			    
-			}
-			//$this->set("groups", $groups);
-			$this->set("hosts", $hosts);
-			$this->set("host_lists", $host_lists);
-			$this->params->hosts = $hosts;
-			$this->params->host_lists = $host_lists;
-		}catch(Exception $e) {
-			echo $e->getMessage();
+		} else {
+			$this->redirect_to("test/index");
 		}
 	}
 

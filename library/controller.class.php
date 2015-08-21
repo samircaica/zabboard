@@ -120,6 +120,11 @@ class Controller {
         }
     }
 
+    function redirect_to($url) {
+        $newUrl = BASE_URL."/".$url;
+        header("Location: ".$newUrl);
+    }
+
     function __destruct() {
         //echo $this->renderHeader;
         $_SESSION['params'] = $this->params;
