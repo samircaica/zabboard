@@ -1,5 +1,12 @@
 <?php
-require_once '../libs/ZabbixApi.class.php';
+define('DS', DIRECTORY_SEPARATOR);
+define('ROOT', dirname(dirname(__FILE__)));
+
+require_once '../library/LoadLibs.php';
+require_once(ROOT . DS . 'config' . DS . 'config.php');
+
+$libs = new LoadLibs($loadLibs);
+$libs->loadLibraries();
 
 session_start();
 
@@ -14,7 +21,6 @@ define('ROOT', dirname(dirname(__FILE__)));
 $url = $_GET['url'];
 
 //require_once (ROOT . DS . 'library' . DS . 'bootstrap.php');
-require_once (ROOT . DS . 'config' . DS . 'config.php');
 require_once (ROOT . DS . 'library' . DS . 'base.php');
 
 ?>

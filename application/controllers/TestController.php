@@ -13,6 +13,10 @@ class TestController extends Controller {
 		$this->set('title',$this->title);
 		//$this->renderHeader = false;
 		//$this->params->authorized = $this->authorized;
+		/* 
+		Load TestLib
+		$testlib = new TestLib();
+		*/
 		$this->set("authorized", $this->authorized);
 	}
 

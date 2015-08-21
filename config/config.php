@@ -13,4 +13,11 @@ define('DEFAULT_CONTROLLER', 'test');
 
 define('BASE_URL','http://zabboard.dev');
 
+/*
+	Add array list with extra libs
+*/
+$loadLibs = array(
+	'../libs/ZabbixApi.class.php',
+	'../libs/TestLib.php');
+
 ?>
