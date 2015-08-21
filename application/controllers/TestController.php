@@ -1,17 +1,6 @@
 <?php
 
-require_once '../libs/ZabbixApi.class.php';
 use ZabbixApi\ZabbixApi;
-
-if(!isset($_SESSION)){
-    //echo "no session index2";
-    session_start();
-    //$_SESSION['params'] = new stdClass();
-}
-
-//session_start();
-//require_once '../libs/ZabbixApi.class.php';
-//use ZabbixApi\ZabbixApi;
 
 class TestController extends Controller {
 
