@@ -7,6 +7,7 @@ if(!isset($_SESSION['params'])) {
     $_SESSION['params'] = new stdClass();
 }
 
+
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(dirname(__FILE__)));
  
