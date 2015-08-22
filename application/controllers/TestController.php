@@ -5,8 +5,6 @@ use ZabbixApi\ZabbixApi;
 class TestController extends Controller {
 
 	private $title = 'Test Page';
-	//private $api = array();
-	//private $authorized = false;
 
 	
 	
@@ -139,6 +137,7 @@ class TestController extends Controller {
 				$this->params->hosts = $hosts;
 				$this->params->host_lists = $host_lists;
 			}catch(Exception $e) {
+				// Exception in ZabbixApi catched
 				echo $e->getMessage();
 			}
 		} else {
@@ -203,6 +202,7 @@ class TestController extends Controller {
 			$this->set("id", $this->_id);
 			//$this->prueba();
 		} catch(Exception $e) {
+			// Exception in ZabbixApi catched
 			echo $e->getMessage();
 		}
 	}
@@ -226,6 +226,7 @@ class TestController extends Controller {
 	    	//print_r($items);
 			$this->set("items", $items);
 		} catch(Exception $e) {
+			// Exception in ZabbixApi catched
 			echo $e->getMessage();
 		}
 	}
@@ -279,6 +280,7 @@ class TestController extends Controller {
 	    	//print_r($items);
 			$this->set("app_lists", $app_lists);
 		} catch(Exception $e) {
+			// Exception in ZabbixApi catched
 			echo $e->getMessage();
 		}
 	}
