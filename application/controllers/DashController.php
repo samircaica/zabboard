@@ -14,7 +14,7 @@ class DashController extends Controller {
 		echo $var1->valor;
 		$_SESSION['favcolor'] = $var1;
 		*/
-		$this->set('title','Inicio');
+		$this->set('title','Variable definida en function prueba');
 		//$this->render_partial("prueba2");
 		$this->render("prueba");
 		//$this->render_partial("prueba2");

@@ -58,12 +58,12 @@ class Controller {
                 Render header if exist
             */
             try { 
-                if (file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'header.php')) {
-                    include (ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'header.php');
-                } else if (file_exists(ROOT . DS . 'application' . DS . 'views' . DS . 'header.php')) {
-                    include (ROOT . DS . 'application' . DS . 'views' . DS . 'header.php');
+                if (file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'header.phtml')) {
+                    include (ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'header.phtml');
+                } else if (file_exists(ROOT . DS . 'application' . DS . 'views' . DS . 'header.phtml')) {
+                    include (ROOT . DS . 'application' . DS . 'views' . DS . 'header.phtml');
                 } else {
-                    throw new Exception ('View header.php or '. $this->_controller . DS . 'header.php doesn\'t exist');
+                    throw new Exception ('View header.phtml or '. $this->_controller . DS . 'header.phtml doesn\'t exist');
                 }
             } catch(Exception $e) {    
                   echo "Message : " . $e->getMessage();
@@ -76,8 +76,8 @@ class Controller {
             Render view if exist
         */
         try {
-            if(file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . $this->_action . '.php')) {
-                include(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . $this->_action . '.php');
+            if(file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . $this->_action . '.phtml')) {
+                include(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . $this->_action . '.phtml');
             } else {
                 throw new Exception ('View '.$this->_controller . DS . $this->_action.' doesn\'t exist');
             }
@@ -92,12 +92,12 @@ class Controller {
             Render footer if exist
         */
         try {
-            if (file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'footer.php')) {
-                include (ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'footer.php');
-            } else if (file_exists(ROOT . DS . 'application' . DS . 'views' . DS . 'footer.php')) {
-                include (ROOT . DS . 'application' . DS . 'views' . DS . 'footer.php');
+            if (file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'footer.phtml')) {
+                include (ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'footer.phtml');
+            } else if (file_exists(ROOT . DS . 'application' . DS . 'views' . DS . 'footer.phtml')) {
+                include (ROOT . DS . 'application' . DS . 'views' . DS . 'footer.phtml');
             } else {
-                throw new Exception ('View views/footer.php or '. $this->_controller . DS . 'footer.php doesn\'t exist');
+                throw new Exception ('View views/footer.phtml or '. $this->_controller . DS . 'footer.phtml doesn\'t exist');
             }
         } catch(Exception $e) {    
               echo "<BR>Message : " . $e->getMessage();
@@ -115,8 +115,8 @@ class Controller {
         $this->_partial = $text;
         extract($this->variables);
         try {
-            if(file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $this->_partial . '.php')) {
-                include(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $this->_partial . '.php');
+            if(file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $this->_partial . '.phtml')) {
+                include(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $this->_partial . '.phtml');
             } else {
                 throw new Exception ('View '.$this->_controller . DS ."_". $this->_partial.' doesn\'t exist');
             }
@@ -133,8 +133,8 @@ class Controller {
         $this->params = $_SESSION['params'];
 
         try {
-            if(file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $text . '.php')) {
-                include(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $text . '.php');
+            if(file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $text . '.phtml')) {
+                include(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $text . '.phtml');
             } else {
                 throw new Exception ('View '.$this->_controller . DS ."_". $text.' doesn\'t exist');
             }
