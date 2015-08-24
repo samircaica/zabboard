@@ -8,6 +8,7 @@ class Controller {
     protected $_action;
     protected $_template;
     protected $_id;
+    protected $_render;
     protected $_partial;
     public $renderHeader;
     public $params;
@@ -47,13 +48,15 @@ class Controller {
 
     /** Display Template **/
      
-    function render($renderHeader = true) {
+    function renderize($renderHeader = true) {
         extract($this->variables);
         $this->params = $_SESSION['params'];
 
         if($renderHeader == true) {
 
-        
+            /*
+                Render header if exist
+            */
             try { 
                 if (file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'header.php')) {
                     include (ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'header.php');
@@ -69,6 +72,9 @@ class Controller {
             }
         }
 
+        /*
+            Render view if exist
+        */
         try {
             if(file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . $this->_action . '.php')) {
                 include(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . $this->_action . '.php');
@@ -82,6 +88,9 @@ class Controller {
               echo "<BR>";
         }
         
+        /*
+            Render footer if exist
+        */
         try {
             if (file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'footer.php')) {
                 include (ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS . 'footer.php');
@@ -98,8 +107,25 @@ class Controller {
         }
     }
 
+    function render($text=null){
+        $this->_render = $text;
+    }
+
     function render_partial($text=null){
         $this->_partial = $text;
+        extract($this->variables);
+        try {
+            if(file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $this->_partial . '.php')) {
+                include(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $this->_partial . '.php');
+            } else {
+                throw new Exception ('View '.$this->_controller . DS ."_". $this->_partial.' doesn\'t exist');
+            }
+        } catch(Exception $e) {    
+              echo "Message : " . $e->getMessage();
+              $this->set('error_message',$e->getMessage());
+              //echo "Code : " . $e->getCode();
+              echo "<BR>";
+        }
     }
 
     function renderPartial($text=null) {
@@ -129,11 +155,11 @@ class Controller {
         //echo $this->renderHeader;
         $_SESSION['params'] = $this->params;
 
-        if(!empty($this->_partial)) {
-            $this->renderPartial($this->_partial);
+        if(!empty($this->_render)) {
+            $this->renderPartial($this->_render);
         } else {
             //$this->_template->render($this->renderHeader);
-            $this->render($this->renderHeader);
+            $this->renderize($this->renderHeader);
         }
         $_SESSION['params'] = $this->params;
     }

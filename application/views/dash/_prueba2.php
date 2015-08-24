@@ -1,3 +1,1 @@
-<?php
-echo "en prueba2";
-?>
+Este es el partial _prueba2 donde se encuentra la muestra de la variable <?=$title?><BR>
