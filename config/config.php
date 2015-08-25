@@ -6,10 +6,12 @@ define ('DEVELOPMENT_ENVIRONMENT',true);
 
 define('DB_PROVIDER', 'mysql');
 //define('DB_PROVIDER', 'postgresql');
-define('DB_NAME', 'yourdatabasename');
-define('DB_USER', 'yourusername');
-define('DB_PASSWORD', 'yourpassword');
+//define('DB_PROVIDER', 'sqlite');
+
 define('DB_HOST', 'localhost');
+define('DB_NAME', 'prueba');
+define('DB_USER', 'root');
+define('DB_PASSWORD', 'root');
 
 define('DEFAULT_CONTROLLER', 'test');
 
