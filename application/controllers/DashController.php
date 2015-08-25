@@ -4,6 +4,11 @@ class DashController extends Controller {
 
 
 	function prueba() {
+		$dash = new Dash();
+		$dash->id = 1;
+		$dash->name = "Samir";
+		$dash->lastname = "Caica";
+		$dash->save();
 		//$this->params = new stdClass();
 		$this->params->nombre = "Samir";
 		/*

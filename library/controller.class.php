@@ -27,14 +27,16 @@ class Controller {
 
         //$this->params = new stdClass();
         $this->params = $_SESSION['params'];
-        
+        /*
         try {
             $this->$model = new $model;
+
         } catch(Exception $e) {    
               echo "Message : " . $e->getMessage();
               //echo "Code : " . $e->getCode();
               echo "<BR>";
         }
+        */
 
         $this->renderHeader = true;
         //$this->_template = new Template($controller, $action, $this->_id);
