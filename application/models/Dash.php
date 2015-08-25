@@ -5,6 +5,7 @@ class Dash extends Model {
 	public $name;
 	public $lastname;
 
+	/*
 	function __construct() {
 		parent::__construct();
 		//echo "Constructor Dash<BR>";
@@ -15,5 +16,6 @@ class Dash extends Model {
 	function test() {
 		echo "testttttt<BR>";
 	}
+	*/
 }
 ?>

@@ -21,7 +21,7 @@ class DashController extends Controller {
 		*/
 		$this->set('title','Variable definida en function prueba');
 		//$this->render_partial("prueba2");
-		$this->render("prueba");
+		//$this->render("prueba");
 		//$this->render_partial("prueba2");
 	}
 

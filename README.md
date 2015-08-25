@@ -15,7 +15,17 @@ Zabbix Board
 <?php
 class TestController extends Controller {
 	function index() {
+		$this->redirect_to("test/main");
+	}
 
+	function main() {
+		$this->set('title','Main Page');
+		$this->render_partial("main_alternative");
+	}
+
+	function other() {
+		$this->set('title','Other Page');
+		$this->render("other");
 	}
 }
 ?>
@@ -36,6 +46,7 @@ class Test extends Model {
 ```php
 <?php
 	echo "Test view from Test";
+	<?=$this->render_partial("test_optional")?>
 ?>
 <BR>
 ```
