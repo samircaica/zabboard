@@ -21,11 +21,31 @@ class TestController extends Controller {
 	function main() {
 		$this->set('title','Main Page');
 		$this->render_partial("main_alternative");
+		$test = new Test();
+		$test->name = "John";
+		$test->name = "Doe";
+		$test->save();
 	}
 
 	function other() {
 		$this->set('title','Other Page');
 		$this->render("other");
+		$test = new Test();
+		$ret = $test->findAll();
+		foreach($ret as $objTest) {
+			echo $objTest->name." ".$objTest->lastname;
+		}
+	}
+
+	function another() {
+		$test = new Test();
+		//Search with AND operator and LIKE using % %
+		$ret = $test->find(array('name' => '%John%', 'AND lastname' => 'Doe'));
+		//Search with OR operator and =
+		$ret = $test->find(array('name' => 'John', 'OR lastname' => 'Doe'));
+		foreach($ret as $objTest) {
+			$objTest->name." ".$objTest->lastname;
+		}
 	}
 }
 ?>
@@ -36,6 +56,9 @@ class TestController extends Controller {
 ```php
 <?php
 class Test extends Model {
+	public id;
+	public name;
+	public lastname;
 
 }
 ?>
