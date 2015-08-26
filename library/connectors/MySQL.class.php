@@ -5,6 +5,26 @@ class MySQL {
     protected $database;
     protected $pk = 'id';
 
+    protected $mysql_data_type_hash = array(
+	    1=>'tinyint',
+	    2=>'smallint',
+	    3=>'int',
+	    4=>'float',
+	    5=>'double',
+	    7=>'timestamp',
+	    8=>'bigint',
+	    9=>'mediumint',
+	    10=>'date',
+	    11=>'time',
+	    12=>'datetime',
+	    13=>'year',
+	    16=>'bit',
+	    //252 is currently mapped to all text and blob types (MySQL 5.0.51a)
+	    253=>'varchar',
+	    254=>'char',
+	    246=>'decimal'
+	);
+
     function __construct() {
     	// Connect to the database using mysqli
     	$this->conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD);
@@ -15,11 +35,12 @@ class MySQL {
   		$this->database = DB_NAME;
 
   		$this->conn->select_db($this->database);
-
+  		/*
   		$sql = sprintf("SELECT * FROM `%s`.`%s` ;", $this->database, "tabla1");
         $result = $this->getConnection()->query($sql);
         print_r($result);
         echo "</BR>";
+        */
     }
 
     public function getConnection () {
@@ -27,8 +48,7 @@ class MySQL {
     }
 
     function save($obj, $tableName) {
-    	echo "En Save MySQL.class()</BR>";
-
+    	//echo "En Save MySQL.class()</BR>";
     	$array = $columNames = $values = array();
 
     	$reflection = new ReflectionObject($obj);
@@ -36,7 +56,7 @@ class MySQL {
     		$key = $value->getName();
             $value = $value->getValue($obj);
             $array[$key] = $value;
-            echo "- Valores definidos -> column: ".$key." value: ".$value."<BR>";
+            //echo "- Valores definidos -> column: ".$key." value: ".$value."<BR>";
         }
     	//echo $columNames['id'];
     	if(empty($array['id'])) {
@@ -49,11 +69,11 @@ class MySQL {
 
     		}
     		//unset($columNames[array_search('id', $columNames)]);
-    		echo implode(',', $columNames);
+    		//echo implode(',', $columNames);
     		//unset($values[0]);
-    		echo implode(',', $values);
-    		echo implode($types);
-    		echo "</BR>";
+    		//echo implode(',', $values);
+    		//echo implode($types);
+    		//echo "</BR>";
     		try {
 	    		$sql = sprintf("INSERT INTO `%s`.`%s` (%s) VALUES (%s)", $this->database, $tableName, implode(', ', $columNames), implode(', ', $marks));
 	    		//$arrayPrepStm = array_merge(array(implode($types)), $values);
@@ -78,9 +98,63 @@ class MySQL {
         	}
     		
     	} else {
-    		echo "Hacer update</BR>";
+    		//echo "Hacer update para id: ".$array['id']."</BR>";
+    		$id = (int)$array['id'];
+    		$q['id'] = $id;
+    		
+    		$ret = $this->find($this, $tableName, $q);
+    		
+    		try {
+    			if(!empty($ret)) {
+	    			/*
+		    		$count = 0;
+		    		$q = array();
+		    		foreach ($array AS $key => $value) {
+		    			$prep = '';
+		    			if($count != 0)
+		    				$prep = " AND ";
+		    			
+		    			$q[$prep." ".$key] = $value;
+		    			//$q[$prep." ".$key] = 1;
+		    			$count++;
+		    			//echo $query."<BR>";
+		    		}
+		    		*/
+		    		unset($array['id']);
+		    		foreach ($array AS $key => $value) {
+		    			$columNames[] = sprintf('`%s` = ?', $key);
+			            $values[] = &$array[$key];
+			            $types[] = $this->setType($value);
+
+		    		}
+		    		try {
+		    			$sql = sprintf("UPDATE `%s`.`%s` SET %s WHERE `id` = %s", $this->database, $tableName, implode(', ', $columNames), $id);
+		    			$stmt = $this->conn->prepare($sql);
+
+				        if (!$stmt) {
+				            throw new Exception($this->conn->error."\n\n".$sql);
+				        }
+				        call_user_func_array(array($stmt, 'bind_param'), array_merge(array(implode($types)), $values));
+				        $stmt->execute();
+				        
+				        if ($stmt->error) {
+			            	throw new Exception($stmt->error."\n\n".$sql);
+				        }
+		    		} catch(Exception $e) {
+		    			echo "<BR>Message : " . $e->getMessage();
+			            $error_message = $e->getMessage();
+			            echo "<BR>";
+			        }
+	    		} else {
+	    			throw new Exception("The data to update does not exist in database.");
+	    		}
+	    	}catch(Exception $e) {
+    			echo "<BR>Message : " . $e->getMessage();
+	            $error_message = $e->getMessage();
+	            echo "<BR>";
+	        }
+
     	}
-    	echo "</BR>";
     }
 
     function find($obj, $tableName, $q) {
@@ -98,7 +172,7 @@ class MySQL {
     	}
     	//echo $query;
     	$sql = sprintf("SELECT * FROM %s.%s WHERE %s", $this->database, $tableName, $query);
-    	//echo $sql."<BR>";
+    	
     	$ret = array();
     	$result = $this->conn->query($sql);
 
@@ -106,6 +180,9 @@ class MySQL {
     		$std = new stdClass();
     		//print_r($row);
     		foreach($row as $key => $value) {
+    			if($key == 'id') {
+    				$value = (int)$value;
+    			}
 	    		$std->$key = $value;
 	    	}
 	    	$ret[] = $std;
@@ -137,8 +214,19 @@ class MySQL {
 
     	$row = $result->fetch_assoc();
     	//print_r($row);
+    	$count = 0;
     	foreach($row as $key => $value) {
-    		$obj->$key = $value;
+    		$type = $result->fetch_field_direct($count)->type;
+    		$dt_str   = $this->mysql_data_type_hash[$type];
+    		//echo $dt_str." ";
+    		if($dt_str == 'int') {
+    			$obj->$key = (int)$value;
+	    	} else if($dt_str == 'double') {
+	            $obj->$key = (double)$value;
+	    	} else {
+	    		$obj->$key = $value;
+	    	}
+    		$count++; 
     	}
     }
 
@@ -154,7 +242,7 @@ class MySQL {
     }
 
     function close() {
-    	echo "Cerrando coneccion<BR>";
+    	//echo "Cerrando coneccion<BR>";
     	$this->conn->close();
     }
 }

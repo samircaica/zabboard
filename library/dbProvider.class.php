@@ -21,11 +21,11 @@ class DbProvider {
     	//echo "Provider en DbProvider: ".$this->_dbProviderMain."<BR>";
 
     	$this->_tableName = strtolower(get_called_class());
-    	echo $this->_tableName;
+    	//echo $this->_tableName;
     	
     	switch($this->_dbProviderMainValue) {
     		case $this->dbs['MYSQL']:
-    			echo "carga MYSQL<BR>";
+    			//echo "carga MYSQL<BR>";
                 $this->loadMySQL();
                 break;
 
@@ -68,7 +68,9 @@ class DbProvider {
     	$this->connector->save($this, $this->_tableName);
     }
 
-    function update() {}
+    function update() {
+    	$this->connector->save($this, $this->_tableName);
+    }
 
     function delete() {}
 

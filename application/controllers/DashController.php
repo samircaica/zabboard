@@ -12,7 +12,14 @@ class DashController extends Controller {
 		//echo $dash->id;
 		//$dash->save();
 		$dash->findFirst();
-		echo $dash->name;
+		echo "Find First</BR>";
+		echo $dash->id." ".$dash->name." ".$dash->lastname." ".$dash->age;
+		echo "</BR>";
+		$dash->name = 'Samir';
+		$dash->age = 36;
+		//$dash->id = 30;
+		$dash->save();
+		echo $dash->id." ".$dash->name." ".$dash->lastname." ".$dash->age;
 		echo "</BR>";
 		$dash->findLast();
 		echo $dash->name;
