@@ -26,8 +26,25 @@ class DashController extends Controller {
 			echo $objDash->name;
 			echo "</BR>";
 		}
-		//echo $dash->name;
 		echo "</BR>";
+		$ret = $dash->find(array('name' => '%Samir%', 'AND id' => '1'));
+		//$ret = $dash->find(array('name' => 'Samir'));
+		//$ret = $dash->find(array('name' => '%Samir%'));
+		foreach($ret as $objDash) {
+			//print_r($objDash);
+			echo $objDash->name." ".$objDash->lastname;
+			echo "</BR>";
+		}
+		echo "</BR>";
+		/*
+		$ret = $dash->find(array('name' => 'Samir', 'AND column' => '%valor%', 'OR column2' => 'valor2'));
+		foreach($ret as $objDash) {
+			//print_r($objDash);
+			echo $objDash->name;
+			echo "</BR>";
+		}
+		echo "</BR>";
+		*/
 		//$this->params = new stdClass();
 		$this->params->nombre = "Samir";
 		/*

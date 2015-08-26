@@ -83,6 +83,36 @@ class MySQL {
     	echo "</BR>";
     }
 
+    function find($obj, $tableName, $q) {
+    	//print_r($q);
+    	$query = '';
+    	foreach ($q AS $key => $value) {
+    		if(is_int($value)) {
+    			$val = $value;
+    		} else {
+    			$val = "'".$value."'";
+    		}
+    		$array[$key] = $val;
+    		$operator = (strpos($value, '%') === false) ? '=' : 'LIKE';
+    		$query .= " ".$key." ".$operator." ".$val;
+    	}
+    	//echo $query;
+    	$sql = sprintf("SELECT * FROM %s.%s WHERE %s", $this->database, $tableName, $query);
+    	//echo $sql."<BR>";
+    	$ret = array();
+    	$result = $this->conn->query($sql);
+
+    	while($row = $result->fetch_assoc()) {
+    		$std = new stdClass();
+    		//print_r($row);
+    		foreach($row as $key => $value) {
+	    		$std->$key = $value;
+	    	}
+	    	$ret[] = $std;
+    	}
+    	return $ret;
+    }
+
     function findAll($obj, $tableName) {
     	$sql = sprintf("SELECT * FROM %s.%s", $this->database, $tableName);
 
