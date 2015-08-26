@@ -19,6 +19,7 @@ class MySQL {
   		$sql = sprintf("SELECT * FROM `%s`.`%s` ;", $this->database, "tabla1");
         $result = $this->getConnection()->query($sql);
         print_r($result);
+        echo "</BR>";
     }
 
     public function getConnection () {
@@ -80,6 +81,35 @@ class MySQL {
     		echo "Hacer update</BR>";
     	}
     	echo "</BR>";
+    }
+
+    function findAll($obj, $tableName) {
+    	$sql = sprintf("SELECT * FROM %s.%s", $this->database, $tableName);
+
+    	$ret = array();
+    	$result = $this->conn->query($sql);
+    	while($row = $result->fetch_assoc()) {
+    		$std = new stdClass();
+    		//print_r($row);
+    		foreach($row as $key => $value) {
+	    		$std->$key = $value;
+	    	}
+	    	$ret[] = $std;
+    	}
+    	return $ret;
+    }
+
+    function findOne($obj, $tableName, $order) {
+    	$sql = sprintf("SELECT * FROM %s.%s ORDER BY id %s", $this->database, $tableName, $order);
+    	$sql .= ' LIMIT 0,1';
+
+    	$result = $this->conn->query($sql);
+
+    	$row = $result->fetch_assoc();
+    	//print_r($row);
+    	foreach($row as $key => $value) {
+    		$obj->$key = $value;
+    	}
     }
 
     private function setType($val) {

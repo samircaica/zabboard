@@ -48,11 +48,24 @@ class DbProvider {
 
     function find($q) {}
 
-    function findAll() {}
+    function findById($q) {}
 
-    function findFirst() {}
+    function findAll() {
+    	/*
+    	$ret = array();
+    	$ret[] = $this->connector->findAll($this, $this->_tableName);
+    	return $ret;
+    	*/
+    	return $this->connector->findAll($this, $this->_tableName);
+    }
 
-    function findLast() {}
+    function findFirst($order="ASC") {
+    	$this->connector->findOne($this, $this->_tableName, $order);
+    }
+
+    function findLast($order="DESC") {
+    	$this->connector->findOne($this, $this->_tableName, $order);
+    }
 
     function save() {
     	$this->connector->save($this, $this->_tableName);

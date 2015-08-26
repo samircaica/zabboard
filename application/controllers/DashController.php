@@ -6,11 +6,28 @@ class DashController extends Controller {
 	function prueba() {
 		$dash = new Dash();
 		//$dash->id = 1;
-		$dash->name = "Samir1";
-		$dash->lastname = "Caica1";
-		$dash->save();
-		echo $dash->id;
-		$dash->save();
+		//$dash->name = "Samir1";
+		//$dash->lastname = "Caica1";
+		//$dash->save();
+		//echo $dash->id;
+		//$dash->save();
+		$dash->findFirst();
+		echo $dash->name;
+		echo "</BR>";
+		$dash->findLast();
+		echo $dash->name;
+		echo "</BR>";
+		//$ret = array();
+		$ret = $dash->findAll();
+		//print_r($ret);
+		echo "</BR>";
+		foreach($ret as $objDash) {
+			//print_r($objDash);
+			echo $objDash->name;
+			echo "</BR>";
+		}
+		//echo $dash->name;
+		echo "</BR>";
 		//$this->params = new stdClass();
 		$this->params->nombre = "Samir";
 		/*
