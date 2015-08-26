@@ -56,9 +56,9 @@ class TestController extends Controller {
 ```php
 <?php
 class Test extends Model {
-	public id;
-	public name;
-	public lastname;
+	public $id;
+	public $name;
+	public $lastname;
 
 }
 ?>
