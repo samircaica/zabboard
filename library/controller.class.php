@@ -99,7 +99,7 @@ class Controller {
             } else if (file_exists(ROOT . DS . 'application' . DS . 'views' . DS . 'footer.phtml')) {
                 include (ROOT . DS . 'application' . DS . 'views' . DS . 'footer.phtml');
             } else {
-                throw new Exception ('View views/footer.phtml or '. $this->_controller . DS . 'footer.phtml doesn\'t exist');
+                throw new Exception('View views/footer.phtml or '. $this->_controller . DS . 'footer.phtml doesn\'t exist');
             }
         } catch(Exception $e) {    
               echo "<BR>Message : " . $e->getMessage();
@@ -120,7 +120,7 @@ class Controller {
             if(file_exists(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $this->_partial . '.phtml')) {
                 include(ROOT . DS . 'application' . DS . 'views' . DS . $this->_controller . DS ."_". $this->_partial . '.phtml');
             } else {
-                throw new Exception ('View '.$this->_controller . DS ."_". $this->_partial.' doesn\'t exist');
+                throw new Exception('View '.$this->_controller . DS ."_". $this->_partial.' doesn\'t exist');
             }
         } catch(Exception $e) {    
               echo "Message : " . $e->getMessage();
