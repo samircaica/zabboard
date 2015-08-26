@@ -29,7 +29,7 @@ class MySQL {
     	// Connect to the database using mysqli
     	$this->conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD);
 
-    	if ($this->conn->connect_error)
+    	if($this->conn->connect_error)
   			die(sprintf('Unable to connect to the database. %s', $this->conn->connect_error));
 
   		$this->database = DB_NAME;
@@ -80,13 +80,13 @@ class MySQL {
 	    		//print_r($arrayPrepStm);
 	    		$stmt = $this->conn->prepare($sql);
 
-		        if (!$stmt) {
+		        if(!$stmt) {
 		            throw new Exception($this->conn->error."\n\n".$sql);
 		        }
 		        call_user_func_array(array($stmt, 'bind_param'), array_merge(array(implode($types)), $values));
 		        $stmt->execute();
 		        
-		        if ($stmt->error) {
+		        if($stmt->error) {
 	            	throw new Exception($stmt->error."\n\n".$sql);
 		        }
 		        $obj->id = $stmt->insert_id;
@@ -131,13 +131,13 @@ class MySQL {
 		    			$sql = sprintf("UPDATE `%s`.`%s` SET %s WHERE `id` = %s", $this->database, $tableName, implode(', ', $columNames), $id);
 		    			$stmt = $this->conn->prepare($sql);
 
-				        if (!$stmt) {
+				        if(!$stmt) {
 				            throw new Exception($this->conn->error."\n\n".$sql);
 				        }
 				        call_user_func_array(array($stmt, 'bind_param'), array_merge(array(implode($types)), $values));
 				        $stmt->execute();
 				        
-				        if ($stmt->error) {
+				        if($stmt->error) {
 			            	throw new Exception($stmt->error."\n\n".$sql);
 				        }
 		    		} catch(Exception $e) {
@@ -176,8 +176,12 @@ class MySQL {
     	$ret = array();
     	$result = $this->conn->query($sql);
 
-    	while($row = $result->fetch_assoc()) {
-    		$std = new stdClass();
+    	$className = get_class($obj);
+		$object = new $className();
+		
+		while($row = $result->fetch_assoc()) {
+    		//$std = new stdClass();
+    		$std = new $className();
     		//print_r($row);
     		foreach($row as $key => $value) {
     			if($key == 'id') {
@@ -185,6 +189,7 @@ class MySQL {
     			}
 	    		$std->$key = $value;
 	    	}
+	    	//$ret[] = $this->objectToObject($std, $className);
 	    	$ret[] = $std;
     	}
     	return $ret;
@@ -195,8 +200,12 @@ class MySQL {
 
     	$ret = array();
     	$result = $this->conn->query($sql);
+
+    	$className = get_class($obj);
+		$object = new $className();
+
     	while($row = $result->fetch_assoc()) {
-    		$std = new stdClass();
+    		$std = new $className();
     		//print_r($row);
     		foreach($row as $key => $value) {
 	    		$std->$key = $value;
@@ -230,10 +239,52 @@ class MySQL {
     	}
     }
 
+    function delete($obj, $tableName) {
+    	echo "En delete Mysql</BR>";
+    	/*
+    	$id = (int)$array['id'];
+		$q['id'] = $id;
+		
+		$ret = $this->find($this, $tableName, $q);
+		*/
+		try {
+			if(!empty($obj->id)) {
+				$q = array('id' => $obj->id);
+				$ret = $this->find($this, $tableName, $q);
+				if(!empty($ret)) {
+					$sql = sprintf("DELETE FROM `%s`.`%s` WHERE `id` = ?", $this->database, $tableName);
+					$stmt = $this->conn->prepare($sql);
+
+					if(!$stmt) {
+						throw new Exception($this->conn->error."\n\n".$sql);
+					}
+
+					$stmt->bind_param('i', $obj->id);
+					$stmt->execute();
+			        if($stmt->error) {
+			            throw new \Exception($stmt->error."\n\n".$sql);
+			        }
+				} else {
+					throw new Exception("Object doesn't exist into database.");
+				}
+
+			} else {
+				throw new Exception("Can not delete an object without id.");
+			}
+
+		} catch(Exception $e) {
+			echo "<BR>Message : " . $e->getMessage();
+            $error_message = $e->getMessage();
+            echo "<BR>";
+		}
+		echo "-----> ".$obj->id;
+
+    }
+
     private function setType($val) {
-    	if (is_int($val)) {
+    	if(is_int($val)) {
             return 'i';
-    	} else if (is_double($val)) {
+    	} else if(is_double($val)) {
             return 'd';
     	} else {
     		return 's';

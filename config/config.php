@@ -17,8 +17,6 @@ define('DEFAULT_CONTROLLER', 'test');
 
 define('BASE_URL','http://zabboard.dev');
 
-$dbProvider = "mysql";
-
 /*
 	Add array list with extra libs
 */

@@ -72,10 +72,11 @@ class DbProvider {
     	$this->connector->save($this, $this->_tableName);
     }
 
-    function delete() {}
+    function delete() {
+    	$this->connector->delete($this, $this->_tableName);
+    }
 
     function __destruct() {
-    	//echo "Close Conn en DbProvider</BR>";
     	$this->connector->close();
     }
 

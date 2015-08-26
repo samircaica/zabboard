@@ -5,41 +5,51 @@ class DashController extends Controller {
 
 	function prueba() {
 		$dash = new Dash();
+		//$dash->id = 90;
+		//$dash->delete();
+		/*
 		//$dash->id = 1;
-		//$dash->name = "Samir1";
-		//$dash->lastname = "Caica1";
+		$dash->name = "Samir5";
+		$dash->lastname = "Caica5";
 		//$dash->save();
 		//echo $dash->id;
-		//$dash->save();
-		$dash->findFirst();
-		echo "Find First</BR>";
-		echo $dash->id." ".$dash->name." ".$dash->lastname." ".$dash->age;
-		echo "</BR>";
-		$dash->name = 'Samir';
+		$dash->save();
+		//$dash->name = 'Samir';
 		$dash->age = 36;
 		//$dash->id = 30;
 		$dash->save();
+		echo $dash->id." ".$dash->name." ".$dash->lastname." ".$dash->age;
+		echo "</BR>";
+		$dash->findFirst();
+		echo "Find First</BR>";
 		echo $dash->id." ".$dash->name." ".$dash->lastname." ".$dash->age;
 		echo "</BR>";
 		$dash->findLast();
 		echo $dash->name;
 		echo "</BR>";
 		//$ret = array();
-		$ret = $dash->findAll();
+		//$ret = $dash->findAll();
 		//print_r($ret);
 		echo "</BR>";
+		*/
+		$ret = $dash->find(array('name' => 'Samir1'));
+		echo "Este es el que voy a borrar: ";
+		echo "</BR>";
 		foreach($ret as $objDash) {
-			//print_r($objDash);
-			echo $objDash->name;
+			echo $objDash->id." ".$objDash->name." ".$objDash->lastname." ".$objDash->age;
 			echo "</BR>";
+			$objDash->delete();
 		}
 		echo "</BR>";
-		$ret = $dash->find(array('name' => '%Samir%', 'AND id' => '1'));
+		echo "</BR>";
+		echo "</BR>";
+		echo "Todos: <BR>";
+		$ret = $dash->findAll();
 		//$ret = $dash->find(array('name' => 'Samir'));
 		//$ret = $dash->find(array('name' => '%Samir%'));
 		foreach($ret as $objDash) {
 			//print_r($objDash);
-			echo $objDash->name." ".$objDash->lastname;
+			echo $objDash->id." ".$objDash->name." ".$objDash->lastname." ".$objDash->age;
 			echo "</BR>";
 		}
 		echo "</BR>";
