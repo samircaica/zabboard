@@ -95,6 +95,99 @@ class PgSQL {
     	}
     }
 
+    function save($obj, $tableName) {
+    	$array = $columNames = $values = array();
+
+    	$reflection = new ReflectionObject($obj);
+    	foreach ($reflection->getProperties(ReflectionProperty::IS_PUBLIC) AS $key => $value) {
+    		$key = $value->getName();
+            $value = $value->getValue($obj);
+            $array[$key] = $value;
+        }
+    	
+    	if(empty($array['id'])) {
+    		unset($array['id']);
+    		$count = 1;
+    		foreach ($array AS $key => $value) {
+    			$columNames[] = sprintf('%s', $key);
+    			$marks[] = '$'.$count;
+    			$values[] = &$array[$key];
+		    	$count++;
+    		}
+
+    		try {
+	    		$sql = sprintf("INSERT INTO %s (%s) VALUES (%s) RETURNING id",  $tableName, implode(', ', $columNames), implode(', ', $marks));
+	    		//print_r(array($values));
+
+	    		$stmt = pg_prepare($this->conn, '', $sql);
+	    		
+		        if(!$stmt) {
+		            throw new Exception(pg_last_error($this->conn)."\n\n".$sql);
+		        }
+		        
+		        $result = pg_execute($this->conn, '', $values);
+		        $id = pg_fetch_row($result);
+		        
+		        if(pg_result_error($result)) {
+	            	throw new Exception(pg_last_error($this->conn)."\n\n".$sql);
+		        }
+
+		        $obj->id = $id[0];		        
+		        pg_free_result($result);
+
+		    } catch(Exception $e) {    
+              echo "<BR>Message : " . $e->getMessage();
+              $error_message = $e->getMessage();
+              //echo "Code : " . $e->getCode();
+              echo "<BR>";
+        	}
+    	} else {
+    		$id = (int)$array['id'];
+    		$q['id'] = $id;
+    		
+    		$ret = $this->find($this, $tableName, $q);
+
+    		try {
+    			if(!empty($ret)) {
+    				unset($array['id']);
+		    		$count = 1;
+		    		foreach ($array AS $key => $value) {
+		    			$columNames[] = sprintf('%s = $'.$count, $key);
+			            $marks[] = '$'.$count;
+			            $values[] = &$array[$key];
+				    	$count++;
+		    		}
+		    		try {
+		    			$sql = sprintf("UPDATE %s SET %s WHERE id = %s", $tableName, implode(', ', $columNames), $id);
+		    			$stmt = pg_prepare($this->conn, '', $sql);
+	    		
+				        if(!$stmt) {
+				            throw new Exception(pg_last_error($this->conn)."\n\n".$sql);
+				        }
+
+				        $result = pg_execute($this->conn, '', $values);
+		        
+				        if(pg_result_error($result)) {
+			            	throw new Exception(pg_last_error($this->conn)."\n\n".$sql);
+				        }
+
+		    		} catch(Exception $e) {
+		    			echo "<BR>Message : " . $e->getMessage();
+			            $error_message = $e->getMessage();
+			            echo "<BR>";
+			        }
+    			} else {
+    				throw new Exception("The data to update does not exist in database.");
+    			}
+    		} catch(Exception $e) {
+    			echo "<BR>Message : " . $e->getMessage();
+	            $error_message = $e->getMessage();
+	            echo "<BR>";
+	        }
+
+    	}
+    }
+
     function find($obj, $tableName, $q) {
     	$query = '';
     	$colTypes = $this->getColumTypes($tableName);
@@ -121,6 +214,7 @@ class PgSQL {
 
     	$className = get_class($obj);
 		$object = new $className();
+		$ret = array();
 
     	while($row = pg_fetch_assoc($result)) {
     		$std = new $className();
@@ -145,6 +239,7 @@ class PgSQL {
 
     	$className = get_class($obj);
 		$object = new $className();
+		$ret = array();
 
     	while($row = pg_fetch_assoc($result)) {
     		$std = new $className();
@@ -170,14 +265,15 @@ class PgSQL {
     	$result = pg_query($this->conn, $sql);
 
     	$row = pg_fetch_assoc($result);
-    	
-    	foreach($row as $key => $value) {
-    		//echo $type = pg_field_type($result, 0);
-    		if($this->pg_to_php[$colTypes[$key]] == 'int') {
-    			$value = (int)$value;
-			}
-			$obj->$key = $value;
-    	}
+    	if(!empty($row)) {
+    		foreach($row as $key => $value) {
+	    		//echo $type = pg_field_type($result, 0);
+	    		if($this->pg_to_php[$colTypes[$key]] == 'int') {
+	    			$value = (int)$value;
+				}
+				$obj->$key = $value;
+	    	}
+	    }
     	pg_free_result($result);
     }
 

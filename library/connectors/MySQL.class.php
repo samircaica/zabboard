@@ -60,7 +60,6 @@ class MySQL {
     }
 
     function save($obj, $tableName) {
-    	//echo "En Save MySQL.class()</BR>";
     	$array = $columNames = $values = array();
 
     	$reflection = new ReflectionObject($obj);
@@ -68,9 +67,8 @@ class MySQL {
     		$key = $value->getName();
             $value = $value->getValue($obj);
             $array[$key] = $value;
-            //echo "- Valores definidos -> column: ".$key." value: ".$value."<BR>";
         }
-    	//echo $columNames['id'];
+    	
     	if(empty($array['id'])) {
     		unset($array['id']);
     		foreach ($array AS $key => $value) {
@@ -80,16 +78,9 @@ class MySQL {
 	            $types[] = $this->setType($value);
 
     		}
-    		//unset($columNames[array_search('id', $columNames)]);
-    		//echo implode(',', $columNames);
-    		//unset($values[0]);
-    		//echo implode(',', $values);
-    		//echo implode($types);
-    		//echo "</BR>";
+    		
     		try {
 	    		$sql = sprintf("INSERT INTO `%s`.`%s` (%s) VALUES (%s)", $this->database, $tableName, implode(', ', $columNames), implode(', ', $marks));
-	    		//$arrayPrepStm = array_merge(array(implode($types)), $values);
-	    		//print_r($arrayPrepStm);
 	    		$stmt = $this->conn->prepare($sql);
 
 		        if(!$stmt) {

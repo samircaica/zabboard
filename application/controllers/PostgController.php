@@ -26,7 +26,22 @@ class PostgController extends Controller {
 			echo "</BR>";
 		}
 		echo "</BR>";
-
+		/*
+		$postg1 = new Postg();
+		$postg1->name = "Samir9";
+		$postg1->lastname = "Caica9";
+		$postg1->age = 762;
+		$postg1->save()2
+		echo $postg1->id." ".$postg1->name." ".$postg1->lastname." ".$postg1->age."<BR>";
+		*/
+		echo "<BR>";
+		echo $postg->id." ".$postg->name." ".$postg->lastname." ".$postg->age."<BR>";
+		$postg->name = "Samir12";
+		$postg->lastname = "Caica10";
+		$postg->age = 98;
+		$postg->save();
+		echo $postg->id." ".$postg->name." ".$postg->lastname." ".$postg->age."<BR>";
+		echo "<BR>";
 	}
 }
 ?>
