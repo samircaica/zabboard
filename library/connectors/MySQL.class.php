@@ -26,6 +26,10 @@ class MySQL {
 	);
 
     function __construct() {
+    	/************************
+    	Separar la conexion del constructor
+    	**************************/
+
     	// Connect to the database using mysqli
     	$this->conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD);
 
@@ -43,8 +47,16 @@ class MySQL {
         */
     }
 
-    public function getConnection () {
-        return $this->conn;
+    function connect() {
+    	// Connect to the database using mysqli
+    	$this->conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD);
+
+    	if($this->conn->connect_error)
+  			die(sprintf('Unable to connect to the database. %s', $this->conn->connect_error));
+
+  		$this->database = DB_NAME;
+
+  		$this->conn->select_db($this->database);
     }
 
     function save($obj, $tableName) {
@@ -166,9 +178,13 @@ class MySQL {
     		} else {
     			$val = "'".$value."'";
     		}
-    		$array[$key] = $val;
-    		$operator = (strpos($value, '%') === false) ? '=' : 'LIKE';
-    		$query .= " ".$key." ".$operator." ".$val;
+    		if($key == "ORDER BY") {
+    			$query .= $key." ".$value; 
+    		} else {
+	    		$array[$key] = $val;
+	    		$operator = (strpos($value, '%') === false) ? '=' : 'LIKE';
+	    		$query .= " ".$key." ".$operator." ".$val;
+	    	}
     	}
     	//echo $query;
     	$sql = sprintf("SELECT * FROM %s.%s WHERE %s", $this->database, $tableName, $query);
@@ -195,8 +211,8 @@ class MySQL {
     	return $ret;
     }
 
-    function findAll($obj, $tableName) {
-    	$sql = sprintf("SELECT * FROM %s.%s", $this->database, $tableName);
+    function findAll($obj, $tableName, $order) {
+    	$sql = sprintf("SELECT * FROM %s.%s ORDER BY id %s", $this->database, $tableName, $order);
 
     	$ret = array();
     	$result = $this->conn->query($sql);
@@ -235,7 +251,7 @@ class MySQL {
 	    	} else {
 	    		$obj->$key = $value;
 	    	}
-    		$count++; 
+    		$count++;
     	}
     }
 

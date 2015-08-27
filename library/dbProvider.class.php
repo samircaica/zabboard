@@ -30,7 +30,7 @@ class DbProvider {
                 break;
 
             case $this->dbs['POSTGRESQL']:
-                $this->loadMySQL();
+                $this->loadPgSQL();
                 break;
 
             case $this->dbs['SQLITE']:
@@ -46,38 +46,55 @@ class DbProvider {
     	$this->connector = new MySQL();
     }
 
+    function loadPgSQL() {
+    	$this->connector = new PgSQL();
+    }
+
     function find($q) {
+    	$this->connector->connect();
     	return $this->connector->find($this, $this->_tableName, $q);
+    	$this->connector->close();
     }
 
     function findById($q) {}
 
-    function findAll() {
-    	return $this->connector->findAll($this, $this->_tableName);
+    function findAll($order="ASC") {
+    	$this->connector->connect();
+    	return $this->connector->findAll($this, $this->_tableName, $order);
+    	$this->connector->close();
     }
 
     function findFirst($order="ASC") {
+    	$this->connector->connect();
     	$this->connector->findOne($this, $this->_tableName, $order);
+    	$this->connector->close();
     }
 
     function findLast($order="DESC") {
+    	$this->connector->connect();
     	$this->connector->findOne($this, $this->_tableName, $order);
+    	$this->connector->close();
     }
 
     function save() {
+    	$this->connector->connect();
     	$this->connector->save($this, $this->_tableName);
     }
 
     function update() {
+    	$this->connector->connect();
     	$this->connector->save($this, $this->_tableName);
+    	$this->connector->close();
     }
 
     function delete() {
+    	$this->connector->connect();
     	$this->connector->delete($this, $this->_tableName);
+    	$this->connector->close();
     }
 
     function __destruct() {
-    	$this->connector->close();
+    	//$this->connector->close();
     }
 
 }
