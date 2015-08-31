@@ -94,8 +94,8 @@ function base() {
 /** Autoload required classes **/
  
 function __autoload($className) {
-    if (file_exists(ROOT . DS . 'library' . DS . strtolower($className) . '.class.php')) {
-        require_once(ROOT . DS . 'library' . DS . strtolower($className) . '.class.php');
+    if (file_exists(ROOT . DS . 'library' . DS . $className . '.class.php')) {
+        require_once(ROOT . DS . 'library' . DS . $className . '.class.php');
     } else if (file_exists(ROOT . DS . 'library' . DS . 'connectors' . DS . $className . '.class.php')) {
         require_once(ROOT . DS . 'library' . DS . 'connectors' . DS . $className . '.class.php');
     } else if (file_exists(ROOT . DS . 'application' . DS . 'controllers' . DS . ucwords($className) . '.php')) {
